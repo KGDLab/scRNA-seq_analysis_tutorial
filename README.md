@@ -40,24 +40,24 @@ Last updated: 2025-08-16
 
 **Install/load common packages (install once; use `library()` at runtime):**
 ```r
-install.packages(c(
-  "Seurat","SeuratData","patchwork","tidyverse","remotes",
-  "rmarkdown","knitr","Matrix"
-))
+ install.packages(c(
+   "Seurat","SeuratData","patchwork","tidyverse","remotes",
+   "rmarkdown","knitr","Matrix"
+ ))
 
-# Bioconductor packages (as needed)
-if (!requireNamespace("BiocManager", quietly = TRUE)) install.packages("BiocManager")
-BiocManager::install(c(
-  "SingleR","celldex","scDblFinder","DropletUtils",
-  "clusterProfiler","fgsea","org.Hs.eg.db","org.Mm.eg.db"
-))
-install.packages(c("msigdbr","SeuratDisk"))
+ # Bioconductor packages (as needed)
+ if (!requireNamespace("BiocManager", quietly = TRUE)) install.packages("BiocManager")
+ BiocManager::install(c(
+   "SingleR","celldex","scDblFinder","DropletUtils",
+   "clusterProfiler","fgsea","org.Hs.eg.db","org.Mm.eg.db"
+ ))
+ install.packages(c("msigdbr","SeuratDisk"))
 
-# Optional: speed up SCTransform
-BiocManager::install("glmGamPoi")
+ # Optional: speed up SCTransform
+ BiocManager::install("glmGamPoi")
 
-# Load when needed
-library(Seurat); library(SeuratData); library(patchwork); library(tidyverse)
+ # Load when needed
+ library(Seurat); library(SeuratData); library(patchwork); library(tidyverse)
 ```
 
 ---
@@ -66,20 +66,20 @@ library(Seurat); library(SeuratData); library(patchwork); library(tidyverse)
 
 **Assign & print**
 ```r
-x <- 3 * 7; x  # 21
+ x <- 3 * 7; x  # 21
 ```
 
 **Help**
 ```r
-?NormalizeData            # or help("NormalizeData")
-help.search("integration")
-apropos("FindCluster")    # fuzzy search
+ ?NormalizeData            # or help("NormalizeData")
+ help.search("integration")
+ apropos("FindCluster")    # fuzzy search
 ```
 
 **Pipes (base R 4.1+ `|>` )**
 ```r
-1:5 |> mean()
-mtcars |> head(3) |> summary()
+ 1:5 |> mean()
+ mtcars |> head(3) |> summary()
 ```
 
 **Tips:** Use `class()`, `str()`, `dim()`, `head()`, `summary()` to inspect objects; after an error, check `traceback()`.
@@ -105,22 +105,22 @@ mtcars |> head(3) |> summary()
 - `VariableFeatures(obj)` (variable genes)
 
 ```r
-obj <- pbmc_small
-DefaultAssay(obj) <- "RNA"
+ obj <- pbmc_small
+ DefaultAssay(obj) <- "RNA"
 
-m_counts <- GetAssayData(obj, slot = "counts")
-m_data   <- GetAssayData(obj, slot = "data")
-dim(m_counts); dim(m_data)
-head(VariableFeatures(obj))
+ m_counts <- GetAssayData(obj, slot = "counts")
+ m_data   <- GetAssayData(obj, slot = "data")
+ dim(m_counts); dim(m_data)
+ head(VariableFeatures(obj))
 ```
 
 ### 2.3 `meta.data` and `Idents`
 ```r
-head(obj@meta.data, 2)
-obj$dummy_tag <- sample(c("A","B"), ncol(obj), TRUE)  # quickly add a column
-table(obj$dummy_tag)
+ head(obj@meta.data, 2)
+ obj$dummy_tag <- sample(c("A","B"), ncol(obj), TRUE)  # quickly add a column
+ table(obj$dummy_tag)
 
-Idents(obj) <- "seurat_clusters"  # set active identity
+ Idents(obj) <- "seurat_clusters"  # set active identity
 ```
 
 ### 2.4 DimReduc: PCA/UMAP internals
@@ -130,27 +130,27 @@ Idents(obj) <- "seurat_clusters"  # set active identity
 - `@key`: coordinate prefix (e.g., `PC_` / `UMAP_`)  
 
 ```r
-obj <- NormalizeData(obj) |>
-  FindVariableFeatures(nfeatures = 200) |>
-  ScaleData()
+ obj <- NormalizeData(obj) |>
+   FindVariableFeatures(nfeatures = 200) |>
+   ScaleData()
 
-obj <- RunPCA(obj, verbose = FALSE) |>
-  RunUMAP(dims = 1:10)
+ obj <- RunPCA(obj, verbose = FALSE) |>
+   RunUMAP(dims = 1:10)
 
-head(Embeddings(obj, "pca")[,1:3])
+ head(Embeddings(obj, "pca")[,1:3])
 ```
 
 ### 2.5 Graphs: KNN/SNN/WNN
 ```r
-obj <- FindNeighbors(obj, dims = 1:10)
-names(obj@graphs)  # e.g., "RNA_snn"
+ obj <- FindNeighbors(obj, dims = 1:10)
+ names(obj@graphs)  # e.g., "RNA_snn"
 ```
 
 ### 2.6 commands / tools / misc
 ```r
-names(obj@commands)[1:5]           # see major steps & parameters
-str(obj@tools, max.level = 1)
-str(obj@misc,  max.level = 1)
+ names(obj@commands)[1:5]           # see major steps & parameters
+ str(obj@tools, max.level = 1)
+ str(obj@misc,  max.level = 1)
 ```
 
 ### 2.7 Cheat Sheet: “Where is X stored?”
@@ -174,19 +174,19 @@ str(obj@misc,  max.level = 1)
 Goal: run the minimal pipeline end-to-end; build intuition for the Seurat object.
 
 ```r
-library(Seurat); library(patchwork)
+ library(Seurat); library(patchwork)
 
-obj <- pbmc_small
-obj <- NormalizeData(obj)
-obj <- FindVariableFeatures(obj, selection.method = "vst", nfeatures = 200)
-obj <- ScaleData(obj)
-obj <- RunPCA(obj, verbose = FALSE)
-obj <- FindNeighbors(obj, dims = 1:10)
-obj <- FindClusters(obj, resolution = 0.5)
-obj <- RunUMAP(obj, dims = 1:10)
+ obj <- pbmc_small
+ obj <- NormalizeData(obj)
+ obj <- FindVariableFeatures(obj, selection.method = "vst", nfeatures = 200)
+ obj <- ScaleData(obj)
+ obj <- RunPCA(obj, verbose = FALSE)
+ obj <- FindNeighbors(obj, dims = 1:10)
+ obj <- FindClusters(obj, resolution = 0.5)
+ obj <- RunUMAP(obj, dims = 1:10)
 
-DimPlot(obj, reduction = "umap", label = TRUE) + NoLegend()
-FeaturePlot(obj, features = head(VariableFeatures(obj), 4))
+ DimPlot(obj, reduction = "umap", label = TRUE) + NoLegend()
+ FeaturePlot(obj, features = head(VariableFeatures(obj), 4))
 ```
 
 ---
@@ -194,13 +194,13 @@ FeaturePlot(obj, features = head(VariableFeatures(obj), 4))
 ## 4. Loading Data (10x/Matrix/RDS)
 
 ```r
-# 10x folder (contains barcodes.tsv.gz / features.tsv.gz / matrix.mtx.gz)
-# counts <- Read10X(data.dir = "data/10x_pbmc/")
-# obj <- CreateSeuratObject(counts, project = "PBMC", min.cells = 3, min.features = 200)
+ # 10x folder (contains barcodes.tsv.gz / features.tsv.gz / matrix.mtx.gz)
+ # counts <- Read10X(data.dir = "data/10x_pbmc/")
+ # obj <- CreateSeuratObject(counts, project = "PBMC", min.cells = 3, min.features = 200)
 
-# RDS (recommended for saving/loading Seurat objects)
-# saveRDS(obj, "data/seurat_obj.rds")
-# obj <- readRDS("data/seurat_obj.rds")
+ # RDS (recommended for saving/loading Seurat objects)
+ # saveRDS(obj, "data/seurat_obj.rds")
+ # obj <- readRDS("data/seurat_obj.rds")
 ```
 
 ---
@@ -208,42 +208,46 @@ FeaturePlot(obj, features = head(VariableFeatures(obj), 4))
 ## 5. Quality Control (QC) & Filtering
 
 ```r
-mt_pat <- if (any(grepl("^MT-", rownames(obj)))) "^MT-" else "^mt-"
-obj[["percent.mt"]] <- PercentageFeatureSet(obj, pattern = mt_pat)
+ mt_pat <- if (any(grepl("^MT-", rownames(obj)))) "^MT-" else "^mt-"
+ obj[["percent.mt"]] <- PercentageFeatureSet(obj, pattern = mt_pat)
 
-VlnPlot(obj, features = c("nFeature_RNA","nCount_RNA","percent.mt"), ncol = 3)
-FeatureScatter(obj, feature1 = "nCount_RNA",   feature2 = "nFeature_RNA") +
-FeatureScatter(obj, feature1 = "nCount_RNA",   feature2 = "percent.mt")
+ VlnPlot(obj, features = c("nFeature_RNA","nCount_RNA","percent.mt"), ncol = 3)
+ FeatureScatter(obj, feature1 = "nCount_RNA",   feature2 = "nFeature_RNA") +
+ FeatureScatter(obj, feature1 = "nCount_RNA",   feature2 = "percent.mt")
 
-# Use MAD as a rough guide (adjust to your data)
-mad_cut <- function(x, nmads=3){
-  med <- median(x); m <- mad(x)
-  c(max(0, med - nmads*m), med + nmads*m)
-}
-# lim_feat  <- mad_cut(obj$nFeature_RNA)
-# lim_count <- mad_cut(obj$nCount_RNA)
-# mt_upper  <- 20  # Humans often < 10–20%
-# obj <- subset(obj, subset =
-#   nFeature_RNA > lim_feat[1] & nFeature_RNA < lim_feat[2] &
-#   nCount_RNA   > lim_count[1] & nCount_RNA   < lim_count[2] &
-#   percent.mt   < mt_upper)
+ # Use MAD as a rough guide (adjust to your data)
+ mad_cut <- function(x, nmads=3){
+   med <- median(x); m <- mad(x)
+   c(max(0, med - nmads*m), med + nmads*m)
+ }
+ # lim_feat  <- mad_cut(obj$nFeature_RNA)
+ # lim_count <- mad_cut(obj$nCount_RNA)
+ # mt_upper  <- 20  # Humans often < 10–20%
+ # obj <- subset(obj, subset =
+ #   nFeature_RNA > lim_feat[1] & nFeature_RNA < lim_feat[2] &
+ #   nCount_RNA   > lim_count[1] & nCount_RNA   < lim_count[2] &
+ #   percent.mt   < mt_upper)
 ```
 
 > Heuristics (tune by dataset): low `nFeature_RNA` suggests empty droplets; high `nFeature_RNA` suggests doublets; for humans, `percent.mt` is often < 10–20%.  
 > Advanced: remove empty droplets with `DropletUtils::emptyDrops`; correct ambient RNA with `SoupX`.
+
+For an expanded discussion of QC metrics and filtering strategies, see [Detailed QC guide](Tutorials/05_QC_Detailed.md).
 
 ---
 
 ## 6. Doublet Detection (scDblFinder)
 
 ```r
-# library(scDblFinder); library(SingleCellExperiment)
-# sce <- as.SingleCellExperiment(obj)
-# sce <- scDblFinder(sce)
-# table(sce$scDblFinder.class)
-# obj$doublet <- sce$scDblFinder.class
-# obj <- subset(obj, subset = doublet == "singlet")
+ # library(scDblFinder); library(SingleCellExperiment)
+ # sce <- as.SingleCellExperiment(obj)
+ # sce <- scDblFinder(sce)
+ # table(sce$scDblFinder.class)
+ # obj$doublet <- sce$scDblFinder.class
+ # obj <- subset(obj, subset = doublet == "singlet")
 ```
+
+For more information about doublet detection and scDblFinder, see [Doublet detection guide](Tutorials/06_Doublet_Detection.md).
 
 ---
 
@@ -251,30 +255,34 @@ mad_cut <- function(x, nmads=3){
 
 **Recommendation: `SCTransform()`** (stable; can regress `percent.mt` / cell-cycle scores).
 ```r
-# SCTransform (recommended)
-# obj <- SCTransform(obj, variable.features.n = 3000, vars.to.regress = "percent.mt", verbose = FALSE)
-# DefaultAssay(obj) <- "SCT"
+ # SCTransform (recommended)
+ # obj <- SCTransform(obj, variable.features.n = 3000, vars.to.regress = "percent.mt", verbose = FALSE)
+ # DefaultAssay(obj) <- "SCT"
 ```
 
 **Traditional workflow (good for teaching/small data):**
 ```r
-# LogNormalize
-# obj <- NormalizeData(obj)
-# obj <- FindVariableFeatures(obj, selection.method = "vst", nfeatures = 3000)
-# obj <- ScaleData(obj, vars.to.regress = "percent.mt")
-# DefaultAssay(obj) <- "RNA"
+ # LogNormalize
+ # obj <- NormalizeData(obj)
+ # obj <- FindVariableFeatures(obj, selection.method = "vst", nfeatures = 3000)
+ # obj <- ScaleData(obj, vars.to.regress = "percent.mt")
+ # DefaultAssay(obj) <- "RNA"
 ```
+
+For a detailed comparison of normalization methods (SCTransform vs log normalization) and feature selection, see [Normalization & feature selection guide](Tutorials/07_Normalization.md).
 
 ---
 
 ## 8. Cell Cycle & Regression
 
 ```r
-# s.genes   <- Seurat::cc.genes.updated.2019$s.genes
-# g2m.genes <- Seurat::cc.genes.updated.2019$g2m.genes
-# obj <- CellCycleScoring(obj, s.features = s.genes, g2m.features = g2m.genes, set.ident = TRUE)
-# obj <- SCTransform(obj, vars.to.regress = c("percent.mt","S.Score","G2M.Score"), verbose = FALSE)
+ # s.genes   <- Seurat::cc.genes.updated.2019$s.genes
+ # g2m.genes <- Seurat::cc.genes.updated.2019$g2m.genes
+ # obj <- CellCycleScoring(obj, s.features = s.genes, g2m.features = g2m.genes, set.ident = TRUE)
+ # obj <- SCTransform(obj, vars.to.regress = c("percent.mt","S.Score","G2M.Score"), verbose = FALSE)
 ```
+
+For more details on cell cycle scoring and regression strategies, see [Cell cycle guide](Tutorials/08_Cell_Cycle.md).
 
 ---
 
@@ -282,23 +290,23 @@ mad_cut <- function(x, nmads=3){
 
 **SCT integration (recommended)**
 ```r
-# features  <- SelectIntegrationFeatures(object.list = list_objs, nfeatures = 3000)
-# list_objs <- PrepSCTIntegration(object.list = list_objs, anchor.features = features, verbose = FALSE)
-# anchors   <- FindIntegrationAnchors(object.list = list_objs, normalization.method = "SCT",
-#                                     anchor.features = features, verbose = FALSE)
-# integrated <- IntegrateData(anchorset = anchors, normalization.method = "SCT", verbose = FALSE)
-# DefaultAssay(integrated) <- "integrated"
+ # features  <- SelectIntegrationFeatures(object.list = list_objs, nfeatures = 3000)
+ # list_objs <- PrepSCTIntegration(object.list = list_objs, anchor.features = features, verbose = FALSE)
+ # anchors   <- FindIntegrationAnchors(object.list = list_objs, normalization.method = "SCT",
+ #                                     anchor.features = features, verbose = FALSE)
+ # integrated <- IntegrateData(anchorset = anchors, normalization.method = "SCT", verbose = FALSE)
+ # DefaultAssay(integrated) <- "integrated"
 ```
 
 **RPCA integration (good for similar compositions / larger datasets)**
 ```r
-# list_objs <- lapply(list_objs, \(x){
-#   x |> NormalizeData() |> FindVariableFeatures() |> ScaleData() |> RunPCA(verbose = FALSE)
-# })
-# features <- SelectIntegrationFeatures(object.list = list_objs, nfeatures = 3000)
-# anchors  <- FindIntegrationAnchors(object.list = list_objs, anchor.features = features,
-#                                    reduction = "rpca", dims = 1:30)
-# integrated <- IntegrateData(anchorset = anchors, dims = 1:30)
+ # list_objs <- lapply(list_objs, \(x){
+ #   x |> NormalizeData() |> FindVariableFeatures() |> ScaleData() |> RunPCA(verbose = FALSE)
+ # })
+ # features <- SelectIntegrationFeatures(object.list = list_objs, nfeatures = 3000)
+ # anchors  <- FindIntegrationAnchors(object.list = list_objs, anchor.features = features,
+ #                                    reduction = "rpca", dims = 1:30)
+ # integrated <- IntegrateData(anchorset = anchors, dims = 1:30)
 ```
 
 ---
@@ -306,13 +314,13 @@ mad_cut <- function(x, nmads=3){
 ## 10. Dimensionality Reduction, Neighbor Graph, Clustering & UMAP
 
 ```r
-# obj <- RunPCA(obj, npcs = 50, verbose = FALSE)
-# ElbowPlot(obj, ndims = 50)
-# dims_to_use <- 1:30
-# obj <- FindNeighbors(obj, dims = dims_to_use)
-# obj <- FindClusters(obj, resolution = 0.4)
-# obj <- RunUMAP(obj, dims = dims_to_use)
-# DimPlot(obj, reduction = "umap", label = TRUE) + NoLegend()
+ # obj <- RunPCA(obj, npcs = 50, verbose = FALSE)
+ # ElbowPlot(obj, ndims = 50)
+ # dims_to_use <- 1:30
+ # obj <- FindNeighbors(obj, dims = dims_to_use)
+ # obj <- FindClusters(obj, resolution = 0.4)
+ # obj <- RunUMAP(obj, dims = dims_to_use)
+ # DimPlot(obj, reduction = "umap", label = TRUE) + NoLegend()
 ```
 
 ---
@@ -320,12 +328,12 @@ mad_cut <- function(x, nmads=3){
 ## 11. Markers & Initial Manual Annotation
 
 ```r
-# DefaultAssay(obj) <- if ("SCT" %in% Assays(obj)) "SCT" else "RNA"
-# Idents(obj) <- "seurat_clusters"
-# markers <- FindAllMarkers(obj, only.pos = TRUE, min.pct = 0.25, logfc.threshold = 0.25)
-# head(markers)
-# VlnPlot(obj, features = c("MS4A1","LYZ"), pt.size = 0)
-# FeaturePlot(obj, features = c("MS4A1","CD3D","LYZ","GNLY"))
+ # DefaultAssay(obj) <- if ("SCT" %in% Assays(obj)) "SCT" else "RNA"
+ # Idents(obj) <- "seurat_clusters"
+ # markers <- FindAllMarkers(obj, only.pos = TRUE, min.pct = 0.25, logfc.threshold = 0.25)
+ # head(markers)
+ # VlnPlot(obj, features = c("MS4A1","LYZ"), pt.size = 0)
+ # FeaturePlot(obj, features = c("MS4A1","CD3D","LYZ","GNLY"))
 ```
 
 ---
@@ -333,12 +341,12 @@ mad_cut <- function(x, nmads=3){
 ## 12. Automatic Annotation (SingleR, optional)
 
 ```r
-# library(SingleR); library(celldex); library(SingleCellExperiment)
-# ref <- celldex::HumanPrimaryCellAtlasData()
-# sce <- as.SingleCellExperiment(obj)
-# pred <- SingleR(test = sce, ref = ref, labels = ref$label.main)
-# obj$SingleR_label <- pred$labels
-# DimPlot(obj, group.by = "SingleR_label", label = TRUE, repel = TRUE)
+ # library(SingleR); library(celldex); library(SingleCellExperiment)
+ # ref <- celldex::HumanPrimaryCellAtlasData()
+ # sce <- as.SingleCellExperiment(obj)
+ # pred <- SingleR(test = sce, ref = ref, labels = ref$label.main)
+ # obj$SingleR_label <- pred$labels
+ # DimPlot(obj, group.by = "SingleR_label", label = TRUE, repel = TRUE)
 ```
 
 ---
@@ -347,20 +355,20 @@ mad_cut <- function(x, nmads=3){
 
 **Differential expression**
 ```r
-# Idents(obj) <- "seurat_clusters"
-# de_0_vs_all <- FindMarkers(obj, ident.1 = 0, min.pct = 0.25, logfc.threshold = 0.25, test.use = "wilcox")
-# head(de_0_vs_all)
+ # Idents(obj) <- "seurat_clusters"
+ # de_0_vs_all <- FindMarkers(obj, ident.1 = 0, min.pct = 0.25, logfc.threshold = 0.25, test.use = "wilcox")
+ # head(de_0_vs_all)
 ```
 
 **GSEA (`clusterProfiler` + `fgsea` + `msigdbr`)**
 ```r
-# library(clusterProfiler); library(msigdbr); library(fgsea)
-# species <- "Homo sapiens"
-# msig <- msigdbr(species = species, category = "H") |> dplyr::select(gs_name, gene_symbol)
-# path_list <- split(msig$gene_symbol, msig$gs_name)
-# mk <- FindMarkers(obj, ident.1 = 0, min.pct = 0.1, logfc.threshold = 0.1)
-# rk <- mk$avg_log2FC; names(rk) <- rownames(mk); rk <- sort(rk, decreasing = TRUE)
-# fg <- fgsea(pathways = path_list, stats = rk, minSize = 15, maxSize = 500, nperm = 1000)
+ # library(clusterProfiler); library(msigdbr); library(fgsea)
+ # species <- "Homo sapiens"
+ # msig <- msigdbr(species = species, category = "H") |> dplyr::select(gs_name, gene_symbol)
+ # path_list <- split(msig$gene_symbol, msig$gs_name)
+ # mk <- FindMarkers(obj, ident.1 = 0, min.pct = 0.1, logfc.threshold = 0.1)
+ # rk <- mk$avg_log2FC; names(rk) <- rownames(mk); rk <- sort(rk, decreasing = TRUE)
+ # fg <- fgsea(pathways = path_list, stats = rk, minSize = 15, maxSize = 500, nperm = 1000)
 ```
 
 > Common error: “`No gene can be mapped`” → check **species**, **ID type** (`SYMBOL`/`ENTREZID`/`ENSEMBL`), and **case** (humans: upper case; mouse: lower case / capitalization).
@@ -370,12 +378,12 @@ mad_cut <- function(x, nmads=3){
 ## 14. Subsetting & Reclustering
 
 ```r
-# tcell_genes <- c("CD3D","CD3E","CD2")
-# obj$TcellFlag <- Matrix::colSums(GetAssayData(obj, slot = "data")[tcell_genes, , drop = FALSE]) > 0
-# tcell <- subset(obj, subset = TcellFlag)
-# tcell <- SCTransform(tcell, variable.features.n = 2000, verbose = FALSE)
-# tcell <- RunPCA(tcell); tcell <- FindNeighbors(tcell, dims = 1:20)
-# tcell <- FindClusters(tcell, resolution = 0.6); tcell <- RunUMAP(tcell, dims = 1:20)
+ # tcell_genes <- c("CD3D","CD3E","CD2")
+ # obj$TcellFlag <- Matrix::colSums(GetAssayData(obj, slot = "data")[tcell_genes, , drop = FALSE]) > 0
+ # tcell <- subset(obj, subset = TcellFlag)
+ # tcell <- SCTransform(tcell, variable.features.n = 2000, verbose = FALSE)
+ # tcell <- RunPCA(tcell); tcell <- FindNeighbors(tcell, dims = 1:20)
+ # tcell <- FindClusters(tcell, resolution = 0.6); tcell <- RunUMAP(tcell, dims = 1:20)
 ```
 
 ---
@@ -383,11 +391,11 @@ mad_cut <- function(x, nmads=3){
 ## 15. Export & Interoperability
 
 ```r
-# saveRDS(obj, "export/seurat_obj.rds")
+ # saveRDS(obj, "export/seurat_obj.rds")
 
-# library(SeuratDisk)
-# SaveH5Seurat(obj, filename = "export/seurat_obj.h5seurat", overwrite = TRUE)
-# Convert("export/seurat_obj.h5seurat", dest = "h5ad", overwrite = TRUE)  # for Scanpy
+ # library(SeuratDisk)
+ # SaveH5Seurat(obj, filename = "export/seurat_obj.h5seurat", overwrite = TRUE)
+ # Convert("export/seurat_obj.h5seurat", dest = "h5ad", overwrite = TRUE)  # for Scanpy
 ```
 
 ---
@@ -395,9 +403,9 @@ mad_cut <- function(x, nmads=3){
 ## 16. Reproducibility & Common Pitfalls
 
 ```r
-# if (!requireNamespace("renv", quietly = TRUE)) install.packages("renv")
-# renv::init(); renv::snapshot()
-# sessionInfo()
+ # if (!requireNamespace("renv", quietly = TRUE)) install.packages("renv")
+ # renv::init(); renv::snapshot()
+ # sessionInfo()
 ```
 
 **Common pitfalls**
@@ -412,14 +420,14 @@ mad_cut <- function(x, nmads=3){
 ## Appendix A: Minimal Pipeline Template
 
 ```r
-# library(Seurat); set.seed(123)
-# counts <- Read10X("data/10x/")
-# obj <- CreateSeuratObject(counts, min.cells = 3, min.features = 200)
-# obj[["percent.mt"]] <- PercentageFeatureSet(obj, pattern = if (any(grepl("^MT-", rownames(obj)))) "^MT-" else "^mt-")
-# obj <- SCTransform(obj, variable.features.n = 3000, vars.to.regress = "percent.mt", verbose = FALSE)
-# obj <- RunPCA(obj); obj <- FindNeighbors(obj, dims = 1:30)
-# obj <- FindClusters(obj, resolution = 0.6); obj <- RunUMAP(obj, dims = 1:30)
-# DimPlot(obj, label = TRUE)
+ # library(Seurat); set.seed(123)
+ # counts <- Read10X("data/10x/")
+ # obj <- CreateSeuratObject(counts, min.cells = 3, min.features = 200)
+ # obj[["percent.mt"]] <- PercentageFeatureSet(obj, pattern = if (any(grepl("^MT-", rownames(obj)))) "^MT-" else "^mt-")
+ # obj <- SCTransform(obj, variable.features.n = 3000, vars.to.regress = "percent.mt", verbose = FALSE)
+ # obj <- RunPCA(obj); obj <- FindNeighbors(obj, dims = 1:30)
+ # obj <- FindClusters(obj, resolution = 0.6); obj <- RunUMAP(obj, dims = 1:30)
+ # DimPlot(obj, label = TRUE)
 ```
 
 ---
@@ -436,3 +444,4 @@ mad_cut <- function(x, nmads=3){
 ---
 
 License: **CC BY 4.0**.
+
